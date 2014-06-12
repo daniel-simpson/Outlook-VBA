@@ -13,12 +13,9 @@ Private Sub Items_ItemAdd(ByVal item As Object)
   Dim msg As Outlook.MailItem
   If TypeName(item) = "MailItem" Then
     Set msg = item
-    
-    Dim timeStr As String
-    timeStr = time
-    
+        
     Dim txt As String
-    Send_Notification "From: " + msg.Sender + " (" + timeStr + ")", msg.Subject
+    Send_Notification "From: " + msg.Sender, msg.Subject
   End If
 ProgramExit:
   Exit Sub
@@ -32,19 +29,20 @@ Private Sub Test_Notifications()
     Dim timeStr As String
     timeStr = time
     
-    Send_Notification "New Mail from SENDER (" + timeStr + ")", "DESC"
+    Send_Notification "From: SENDER _TimeAndEn#oding test2", "DESC"
 End Sub
 
 Private Sub Send_Notification(ByVal eventStr As String, ByVal descriptionStr As String)
     Dim result As String
     Dim httpReq As Object: Set httpReq = CreateObject("MSXML2.XMLHTTP")
+    Dim timeStr As String: timeStr = time
     
     Dim url As String
     
     'Note, need to add API key on next line
-    url = "https://www.notifymyandroid.com/publicapi/notify?apikey=" + APIKEY _
-            + "&application=" + URLEncode("Outlook+(New+Mail)") _
-            + "&event=" + URLEncode(eventStr) _
+    url = "https://www.notifymyandroid.com/publicapi/notify?apikey=API KEY HERE" _
+            + "&application=" + URLEncode("Outlook (New Mail)") _
+            + "&event=" + URLEncode(eventStr + " (" + timeStr + ")") _
             + "&description=" + URLEncode(descriptionStr)
         
     httpReq.Open "GET", url, False
