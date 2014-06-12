@@ -1,9 +1,8 @@
 Private WithEvents Items As Outlook.Items
 Private Sub Application_Startup()
-  Dim olApp As Outlook.Application
-  Dim objNS As Outlook.NameSpace
-  Set olApp = Outlook.Application
-  Set objNS = olApp.GetNamespace("MAPI")
+  Dim olApp As Outlook.Application: Set olApp = Outlook.Application
+  Dim objNS As Outlook.NameSpace: Set objNS = olApp.GetNamespace("MAPI")
+    
   ' default local Inbox
   Set Items = objNS.GetDefaultFolder(olFolderInbox).Items
 End Sub
@@ -14,7 +13,6 @@ Private Sub Items_ItemAdd(ByVal item As Object)
   If TypeName(item) = "MailItem" Then
     Set msg = item
         
-    Dim txt As String
     Send_Notification "From: " + msg.Sender, msg.Subject
   End If
 ProgramExit:
@@ -25,30 +23,24 @@ ErrorHandler:
 End Sub
 
 Private Sub Test_Notifications()
-    Dim msg As String
-    Dim timeStr As String
-    timeStr = time
-    
     Send_Notification "From: SENDER _TimeAndEn#oding test2", "DESC"
 End Sub
 
-Private Sub Send_Notification(ByVal eventStr As String, ByVal descriptionStr As String)
-    Dim result As String
+Private Sub Send_Notification(ByVal senderStr As String, ByVal subjectStr As String)
     Dim httpReq As Object: Set httpReq = CreateObject("MSXML2.XMLHTTP")
-    Dim timeStr As String: timeStr = time
-    
-    Dim url As String
+    Dim result, url, timeStr As String: timeStr = time
     
     'Note, need to add API key on next line
     url = "https://www.notifymyandroid.com/publicapi/notify?apikey=API KEY HERE" _
             + "&application=" + URLEncode("Outlook (New Mail)") _
-            + "&event=" + URLEncode(eventStr + " (" + timeStr + ")") _
-            + "&description=" + URLEncode(descriptionStr)
+            + "&event=" + URLEncode("From: " + senderStr + " (" + timeStr + ")") _
+            + "&description=" + URLEncode(subjectStr)
         
     httpReq.Open "GET", url, False
     httpReq.Send
      
     result = httpReq.responseText
+    'TODO: check for 200 success code
     Set httpReq = Nothing
 End Sub
 
@@ -83,3 +75,5 @@ Public Function URLEncode( _
     URLEncode = Join(result, "")
   End If
 End Function
+
+
