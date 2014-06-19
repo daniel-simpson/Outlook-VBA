@@ -1,4 +1,9 @@
 Outlook-VBA
 ===========
 
-Outlook VBA for ongoing workflow updates
+Outlook VBA scripts to enhance my personal workflow:
+
+  - Outlook Push Notifications
+  - System Locked monitoring
+ 
+  
